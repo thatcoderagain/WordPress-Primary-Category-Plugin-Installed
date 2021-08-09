@@ -110,12 +110,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let CategoryDropdown = props => {
+  const select = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__["useSelect"])(select => {
+    return {
+      categories: select('core').getEntityRecords('taxonomy', 'category')
+    };
+  });
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("select", {
     name: "pcfp_primary_category",
     onChange: event => props.onMetaFieldChange(event)
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("option", {
     value: ""
-  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Select Category')), props.categories && props.categories.map(option => Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("option", {
+  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Select Category')), select.categories && select.categories.map(option => Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("option", {
     key: option.slug,
     value: option.slug,
     selected: props.pcfp_primary_category == option.slug ? 'selected' : ''
@@ -124,7 +129,6 @@ let CategoryDropdown = props => {
 
 CategoryDropdown = Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__["withSelect"])(select => {
   return {
-    categories: select('core').getEntityRecords('taxonomy', 'category'),
     pcfp_primary_category: select('core/editor').getEditedPostAttribute('meta')['pcfp_primary_category']
   };
 })(CategoryDropdown);

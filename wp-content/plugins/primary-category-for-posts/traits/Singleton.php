@@ -14,7 +14,7 @@ trait Singleton
     }
 
     /**
-     * Restricting use to clone an instance
+     * Restrict to clone an instance
      */
     final public function __clone()
     {

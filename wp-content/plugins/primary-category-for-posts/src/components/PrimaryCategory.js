@@ -1,13 +1,20 @@
 import { __ } from '@wordpress/i18n';
 import {
     AsyncModeProvider,
-    select,
+    useSelect,
     withSelect,
     withDispatch
 } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 
 let CategoryDropdown = (props) => {
+    const select = useSelect((select) => {
+            return {
+                categories: select('core').getEntityRecords('taxonomy', 'category'),
+            }
+        }
+    );
+
     return (
         <>
             <select
@@ -15,19 +22,18 @@ let CategoryDropdown = (props) => {
                 onChange={(event) => props.onMetaFieldChange(event)}
             >
                 <option value="">{__('Select Category')}</option>
-                {props.categories &&
-                    props.categories.map(
+                {select.categories &&
+                    select.categories.map(
                         (option) => <option key={option.slug} value={option.slug} selected={ props.pcfp_primary_category == option.slug ? 'selected' : '' }>{__(option.name)}</option>
                     )}
-    </select>
-    </>
+            </select>
+        </>
     );
 };
 
 CategoryDropdown = withSelect(
     (select) => {
-    return {
-            categories: select('core').getEntityRecords('taxonomy', 'category'),
+        return {
             pcfp_primary_category: select('core/editor').getEditedPostAttribute('meta')['pcfp_primary_category'],
         };
     }
@@ -55,13 +61,13 @@ export default function PrimaryCategory()
 {
     return (
     <PluginDocumentSettingPanel
-    name="Primary Category"
-    title="Primary Category"
-    className="primary-category-wrapper"
+        name="Primary Category"
+        title="Primary Category"
+        className="primary-category-wrapper"
     >
-    <AsyncModeProvider value={true}>
+            <AsyncModeProvider value={true}>
                 <CategoryDropdown />
-    </AsyncModeProvider>
+            </AsyncModeProvider>
     </PluginDocumentSettingPanel>
     );
 }
